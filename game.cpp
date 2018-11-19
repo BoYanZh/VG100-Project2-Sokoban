@@ -1,9 +1,12 @@
 #include <cstdlib>
 #include <iostream>
+#include <cstdio>
 #include <Windows.h>
+#include <conio.h> 
 
 #define ROW 11
 #define COL 11
+
 
 int xBox[10], yBox[10];
 int x0, y0;
@@ -23,32 +26,44 @@ char map[6][ROW][COL] =
      mapNow[ROW][COL], mapTgt[ROW][COL], sr;
 int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1}, boxIndex = 0, mapIndex;
 
+void setColor(unsigned short ForeColor=7,unsigned short BackGroundColor=0){
+	HANDLE handle=GetStdHandle(STD_OUTPUT_HANDLE);//»ñÈ¡µ±Ç°´°¿Ú¾ä±ú
+	SetConsoleTextAttribute(handle,ForeColor+BackGroundColor*0x10);//ÉèÖÃÑÕÉ«
+}
 int main(void) {
   while (1) {
     printf("choose the map(0~5):");
-    scanf("%d", &mapIndex);
+    scanf("%d", &mapIndex); //mapIndex
     for (int i = 0; i < ROW; i++) {
       for (int j = 0; j < COL; j++) {
         mapNow[i][j] = map[mapIndex][i][j] != '$' ? map[mapIndex][i][j] : ' ';
         mapTgt[i][j] = map[mapIndex][i][j] == '$' ? '$' : ' ';
         if (map[mapIndex][i][j] == '@')
-          xBox[boxIndex] = i, yBox[boxIndex++] = j;
+          xBox[boxIndex] = i, yBox[boxIndex++] = j;//ºó×ÔÔö 
         else if (map[mapIndex][i][j] == '^')
           x0 = i, y0 = j;
       }
     }
+    system("cls");
+    int reachCount = 0, dire = 0;
     while (1) {
       printf(
-          "UI: #:Wall  @:Box  $:Target  ^:Man\n"
-          "Input: w/a/s/d:Movement r:Restart q:Quit\n");
-      int reachCount = 0, dire = 0;
+          "[UI] #:Wall  @:Box  $:Target  ^:Man\n"
+          "[Input] w/a/s/d:Movement  r:Restart  q:Quit\n");
+      reachCount = 0;dire = 0;//int reachCount = 0, dire = 0;
       for (int i = 0; i < ROW; i++, printf("\n"))
         for (int j = 0; j < COL; j++, printf(" ")) {
-          printf("%c", mapNow[i][j] != ' ' ? mapNow[i][j] : mapTgt[i][j]);
+          char printNow = mapNow[i][j] != ' ' ? mapNow[i][j] : mapTgt[i][j];
+		  //printf("%c", mapNow[i][j] != ' ' ? mapNow[i][j] : mapTgt[i][j]);
+		  if (printNow == '^'){ setColor(12,0);printf("%c",printNow);setColor(7,0); }
+		  else if (printNow == '@'){ setColor(14,0);printf("%c",printNow);setColor(7,0); }
+  		  else if (printNow == '$'){ setColor(9,0);printf("%c",printNow);setColor(7,0); }
+  		  else printf("%c",printNow);
           if (mapTgt[i][j] == '$' && mapNow[i][j] == '@') reachCount++;
         }
       if (reachCount == boxIndex) break;
-      scanf("%c", &sr), fflush(stdin), system("cls");
+      //------------------------------------------------------------------------------------------------------
+      sr=getch();system("cls");//scanf("%c", &sr), fflush(stdin), system("cls");
       if (sr == 'w')
         dire = 0;
       else if (sr == 'd')
@@ -71,11 +86,12 @@ int main(void) {
           }
         }
         continue;
-      } else if (sr == 'q')
+      }
+	  else if (sr == 'q')
         break;
       else
         continue;
-      if ((mapNow[x0 + dx[dire]][y0 + dy[dire]] == '@' &&
+      /*Movement Input continues here:*/if ((mapNow[x0 + dx[dire]][y0 + dy[dire]] == '@' &&
            mapNow[x0 + 2 * +dx[dire]][y0 + 2 * dy[dire]] == ' ') ||
           mapNow[x0 + dx[dire]][y0 + dy[dire]] == ' ') {
         for (int i = 0; i < boxIndex; i++)
@@ -89,6 +105,7 @@ int main(void) {
         x0 += dx[dire], y0 += dy[dire];
       }
     }
+    if (reachCount == boxIndex) printf("\nYou successfully get through the maze! Your score is: N/A. Wanna another try?\n");
   }
   return 0;
 }
@@ -96,12 +113,12 @@ int main(void) {
 void connectBluetooth()
 {
 	HANDLE hCom = CreateFile("\\\\.\\COM9", GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, 0, NULL); //ä¸ŽHC-06å»ºç«‹æ— çº¿è¿žæŽ¥
+		0, NULL, OPEN_EXISTING, 0, NULL); //ÓëHC-06½¨Á¢ÎÞÏßÁ¬½Ó
 	if (hCom == INVALID_HANDLE_VALUE) {
 		std::cout << "Port unavailable!" << std::endl;
-		return 0;
+		return;
 	}
-//ä»¥ä¸‹é…ç½®ä¸²å£é€šä¿¡å‚æ•°
+//ÒÔÏÂÅäÖÃ´®¿ÚÍ¨ÐÅ²ÎÊý
 	DCB dcb;
 	GetCommState(hCom, &dcb);
 	dcb.BaudRate = 9600;
@@ -111,16 +128,16 @@ void connectBluetooth()
 	BOOL br = SetCommState(hCom,&dcb);
 	COMMTIMEOUTS cto ={MAXDWORD, MAXDWORD, MAXDWORD, MAXDWORD, MAXDWORD};
 	br = SetCommTimeouts(hCom, &cto);
-//å¼€å§‹ç­‰å¾…ç”¨æˆ·è¾“å…¥
+//¿ªÊ¼µÈ´ýÓÃ»§ÊäÈë
 	for (; ; ) {
 		int nInput = 0;
 		std::cin >> nInput;
 		if (nInput > 255 || nInput < 0) {
-			break; //å¦‚æžœè¾“å…¥çš„å€¼å¤§äºŽ255æˆ–å°äºŽ0åˆ™ç›´æŽ¥é€€å‡ºç¨‹åº
+			break; //Èç¹ûÊäÈëµÄÖµ´óÓÚ255»òÐ¡ÓÚ0ÔòÖ±½ÓÍË³ö³ÌÐò
 		}
 		BYTE byVal = (BYTE)nInput;
 		DWORD dwTransmitted;
-//å°†è¾“å…¥çš„å€¼å‘é€ç»™HC-06
+//½«ÊäÈëµÄÖµ·¢ËÍ¸øHC-06
 		WriteFile(hCom, &byVal, sizeof(byVal), &dwTransmitted, NULL);
 	}
 	CloseHandle(hCom);
