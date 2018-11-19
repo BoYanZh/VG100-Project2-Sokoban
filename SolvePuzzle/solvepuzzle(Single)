@@ -1,0 +1,95 @@
+#include <cstdio>
+#include <cstring>
+#include <queue>
+#define LL long long
+#define lowbit(x) ((x) & (-x))
+const int MAXN = 10;
+const int INF = 0x3f3f3f3f;
+const int dir[][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}}; // 左a，右d ，后s，前w
+using namespace std; //@ - 2 $ - 3 ^ - 4 # - 1
+
+struct POINT
+{
+    int x, y, dis;
+    int xlast, ylast;
+};
+int mp[MAXN][MAXN], vis[MAXN][MAXN][4], row, col, cVis[MAXN][MAXN];
+queue<POINT> qu;
+int st, ed;
+int Egx, Egy;
+POINT boxSt, peo;
+bool Check(int x, int y, int xcur, int ycur)
+{
+    if (x == st && y == ed)
+        return true;
+    cVis[x][y] = 1;
+    for (int i = 0; i < 4; i++)
+    {
+        int xx = x + dir[i][0], yy = y + dir[i][1];
+        if (xx >= 1 && xx <= row && yy >= 1 && yy <= col && !cVis[xx][yy] && mp[xx][yy] != 1 && !(xx == xcur && yy == ycur))
+            if (Check(xx, yy, xcur, ycur))
+                return true;
+    }
+    return false;
+}
+int BFS(POINT boxSt)
+{
+    bool first = true;
+    memset(vis, 0, sizeof vis);
+    while (!qu.empty())
+        qu.pop();
+    qu.push(boxSt);
+    while (!qu.empty())
+    {
+        POINT cur = qu.front();
+        qu.pop();
+        if (mp[cur.x][cur.y] == 3)
+            return cur.dis;
+        for (int i = 0; i < 4; i++) //0, 1, 2, 3, up, down, left, right
+        {
+            int x = cur.x + dir[i][0], y = cur.y + dir[i][1];
+            if (mp[x][y] != 1 && x >= 1 && x <= row && y >= 1 && y <= col && !vis[x][y][i])
+            {
+                st = cur.x - dir[i][0], ed = cur.y - dir[i][1];
+                memset(cVis, 0, sizeof cVis);
+                cVis[peo.x][peo.y] = 1;
+                POINT temp;
+                temp.x = x, temp.y = y, temp.dis = cur.dis + 1;
+                temp.xlast = cur.x, temp.ylast = cur.y;
+                if (Check(cur.xlast, cur.ylast, cur.x, cur.y))
+                {
+                    vis[x][y][i] = 1;
+                    qu.push(temp);
+                }
+            }
+        }
+        for (int i = 0; i <row; i++, printf("\n"))
+        for (int j = 0; j <col; j++, printf(" ")) {
+			printf("%d",cVis[i][j]);
+		} printf("\n"); 
+
+    }
+    return -1;
+}
+int main()
+{
+    freopen("input.txt", "r", stdin); //pay attention to input format
+    int i, j, T;
+    scanf("%d", &T);
+    while (T--)
+    {
+        boxSt.dis = 0;
+        scanf("%d%d", &row, &col);
+        for (i = 1; i <= row; i++)
+            for (j = 1; j <= col; j++)
+            {
+                scanf("%d", &mp[i][j]);
+                if (mp[i][j] == 2)
+                    boxSt.x = i, boxSt.y = j;
+                if (mp[i][j] == 4)
+                    boxSt.xlast = i, boxSt.ylast = j;
+            }
+        printf("%d\n", BFS(boxSt));
+    }
+    return 0;
+}
