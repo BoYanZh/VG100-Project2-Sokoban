@@ -26,9 +26,13 @@ char map[6][ROW][COL] =
      mapNow[ROW][COL], mapTgt[ROW][COL], sr;
 int dx[4] = {-1, 0, 1, 0}, dy[4] = {0, 1, 0, -1}, boxIndex = 0, mapIndex;
 
+//void moveCar(int dire){}
+//void magnetOn(int num){}
+//void magnetOff(int num){}
+
 void setColor(unsigned short ForeColor=7,unsigned short BackGroundColor=0){
-	HANDLE handle=GetStdHandle(STD_OUTPUT_HANDLE);//»ñÈ¡µ±Ç°´°¿Ú¾ä±ú
-	SetConsoleTextAttribute(handle,ForeColor+BackGroundColor*0x10);//ÉèÖÃÑÕÉ«
+	HANDLE handle=GetStdHandle(STD_OUTPUT_HANDLE);//è·å–å½“å‰çª—å£å¥æŸ„
+	SetConsoleTextAttribute(handle,ForeColor+BackGroundColor*0x10);//è®¾ç½®é¢œè‰²
 }
 int main(void) {
   while (1) {
@@ -39,7 +43,7 @@ int main(void) {
         mapNow[i][j] = map[mapIndex][i][j] != '$' ? map[mapIndex][i][j] : ' ';
         mapTgt[i][j] = map[mapIndex][i][j] == '$' ? '$' : ' ';
         if (map[mapIndex][i][j] == '@')
-          xBox[boxIndex] = i, yBox[boxIndex++] = j;//ºó×ÔÔö 
+          xBox[boxIndex] = i, yBox[boxIndex++] = j;//åè‡ªå¢ 
         else if (map[mapIndex][i][j] == '^')
           x0 = i, y0 = j;
       }
@@ -92,7 +96,7 @@ int main(void) {
       else
         continue;
       /*Movement Input continues here:*/if ((mapNow[x0 + dx[dire]][y0 + dy[dire]] == '@' &&
-           mapNow[x0 + 2 * +dx[dire]][y0 + 2 * dy[dire]] == ' ') ||
+          mapNow[x0 + 2 * +dx[dire]][y0 + 2 * dy[dire]] == ' ') ||
           mapNow[x0 + dx[dire]][y0 + dy[dire]] == ' ') {
         for (int i = 0; i < boxIndex; i++)
           if (x0 + dx[dire] == xBox[i] && y0 + dy[dire] == yBox[i]) {
@@ -103,6 +107,8 @@ int main(void) {
         mapNow[x0 + dx[dire]][y0 + dy[dire]] = '^';
         mapNow[x0][y0] = ' ';
         x0 += dx[dire], y0 += dy[dire];
+        
+//        MoveCar(dire);//MoveCan(dire, lastdire);
       }
     }
     if (reachCount == boxIndex) printf("\nYou successfully get through the maze! Your score is: N/A. Wanna another try?\n");
@@ -113,12 +119,12 @@ int main(void) {
 void connectBluetooth()
 {
 	HANDLE hCom = CreateFile("\\\\.\\COM9", GENERIC_READ | GENERIC_WRITE,
-		0, NULL, OPEN_EXISTING, 0, NULL); //ÓëHC-06½¨Á¢ÎŞÏßÁ¬½Ó
+		0, NULL, OPEN_EXISTING, 0, NULL); //ä¸HC-06å»ºç«‹æ— çº¿è¿æ¥
 	if (hCom == INVALID_HANDLE_VALUE) {
 		std::cout << "Port unavailable!" << std::endl;
 		return;
 	}
-//ÒÔÏÂÅäÖÃ´®¿ÚÍ¨ĞÅ²ÎÊı
+//ä»¥ä¸‹é…ç½®ä¸²å£é€šä¿¡å‚æ•°
 	DCB dcb;
 	GetCommState(hCom, &dcb);
 	dcb.BaudRate = 9600;
@@ -128,16 +134,16 @@ void connectBluetooth()
 	BOOL br = SetCommState(hCom,&dcb);
 	COMMTIMEOUTS cto ={MAXDWORD, MAXDWORD, MAXDWORD, MAXDWORD, MAXDWORD};
 	br = SetCommTimeouts(hCom, &cto);
-//¿ªÊ¼µÈ´ıÓÃ»§ÊäÈë
+//å¼€å§‹ç­‰å¾…ç”¨æˆ·è¾“å…¥
 	for (; ; ) {
 		int nInput = 0;
 		std::cin >> nInput;
 		if (nInput > 255 || nInput < 0) {
-			break; //Èç¹ûÊäÈëµÄÖµ´óÓÚ255»òĞ¡ÓÚ0ÔòÖ±½ÓÍË³ö³ÌĞò
+			break; //å¦‚æœè¾“å…¥çš„å€¼å¤§äº255æˆ–å°äº0åˆ™ç›´æ¥é€€å‡ºç¨‹åº
 		}
 		BYTE byVal = (BYTE)nInput;
 		DWORD dwTransmitted;
-//½«ÊäÈëµÄÖµ·¢ËÍ¸øHC-06
+//å°†è¾“å…¥çš„å€¼å‘é€ç»™HC-06
 		WriteFile(hCom, &byVal, sizeof(byVal), &dwTransmitted, NULL);
 	}
 	CloseHandle(hCom);
