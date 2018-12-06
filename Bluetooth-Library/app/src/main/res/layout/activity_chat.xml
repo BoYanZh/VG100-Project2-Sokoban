@@ -90,60 +90,60 @@
 
     <Button
         android:id="@+id/right_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@drawable/main_button_style"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/right_button"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#fff"
-        android:textSize="36sp"
+        android:textSize="64sp"
         app:layout_constraintStart_toEndOf="@+id/forward_button"
         app:layout_constraintTop_toBottomOf="@+id/forward_button" />
 
     <Button
         android:id="@+id/back_button"
-        android:layout_width="50dp"
-        android:layout_height="51dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@drawable/main_button_style"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/back_button"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#fff"
-        android:textSize="36sp"
+        android:textSize="64sp"
         app:layout_constraintStart_toStartOf="@+id/forward_button"
         app:layout_constraintTop_toBottomOf="@+id/left_button" />
 
     <Button
         android:id="@+id/left_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:background="@drawable/main_button_style"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/left_button"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#fff"
-        android:textSize="36sp"
+        android:textSize="64sp"
         app:layout_constraintEnd_toStartOf="@+id/forward_button"
         app:layout_constraintTop_toBottomOf="@+id/forward_button" />
 
     <Button
         android:id="@+id/forward_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/main_button_style"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/forward_button"
         android:textColor="#fff"
-        android:textSize="36sp"
+        android:textSize="64sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.29000002" />
+        app:layout_constraintVertical_bias="0.050000012" />
 
     <TextView
         android:id="@+id/activity_chat_status"
