@@ -1,6 +1,7 @@
 package me.aflak.libraries.ui.chat.view;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -38,6 +39,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView{
 
     @Inject ChatPresenter presenter;
 
+    int buttonDelayTime = 3000;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,51 +59,111 @@ public class ChatActivity extends AppCompatActivity implements ChatView{
     @OnClick(R.id.forward_button)
     public void onForward(){
         presenter.onForward();
+        enableMovingButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableMovingButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.back_button)
     public void onBack(){
         presenter.onBack();
+        enableMovingButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableMovingButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.left_button)
     public void onLeft(){
         presenter.onLeft();
+        enableMovingButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableMovingButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.right_button)
     public void onRight(){
         presenter.onRight();
+        enableMovingButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableMovingButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.level1_button)
     public void onLevel1(){
-        presenter.onLevel1();
+        presenter.onLevel(1);
+        enableHWButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableHWButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.level2_button)
     public void onLevel2(){
-        presenter.onLevel2();
+        presenter.onLevel(2);
+        enableHWButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableHWButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.level3_button)
     public void onLevel3(){
-        presenter.onLevel3();
+        presenter.onLevel(3);
+        enableHWButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableHWButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.level4_button)
     public void onLevel4(){
-        presenter.onLevel4();
+        presenter.onLevel(4);
+        enableHWButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableHWButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.level5_button)
     public void onLevel5(){
-        presenter.onLevel5();
+        presenter.onLevel(5);
+        enableHWButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableHWButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @OnClick(R.id.level6_button)
     public void onLevel6(){
-        presenter.onLevel6();
+        presenter.onLevel(6);
+        enableHWButton(false);
+        new Handler().postDelayed(new Runnable(){
+            public void run() {
+                enableHWButton(true);
+            }
+        }, buttonDelayTime);
     }
 
     @Override
@@ -125,6 +188,14 @@ public class ChatActivity extends AppCompatActivity implements ChatView{
         level4.setEnabled(enabled);
         level5.setEnabled(enabled);
         level6.setEnabled(enabled);
+    }
+
+    @Override
+    public void enableMovingButton(boolean enabled) {
+        forward.setEnabled(enabled);
+        back.setEnabled(enabled);
+        left.setEnabled(enabled);
+        right.setEnabled(enabled);
     }
 
     @Override

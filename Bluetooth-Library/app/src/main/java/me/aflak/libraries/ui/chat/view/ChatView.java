@@ -9,4 +9,5 @@ public interface ChatView {
     void setStatus(int resId);
     void enableHWButton(boolean enabled);
     void showToast(String message);
+    void enableMovingButton(boolean enabled);
 }

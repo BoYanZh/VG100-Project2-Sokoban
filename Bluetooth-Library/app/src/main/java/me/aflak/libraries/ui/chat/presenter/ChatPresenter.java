@@ -20,6 +20,7 @@ public interface ChatPresenter {
     void onLevel4();
     void onLevel5();
     void onLevel6();
+    void onLevel(int level);
     void onStart(Activity activity);
     void onStop();
 }

@@ -41,21 +41,25 @@ public class ChatPresenterImpl implements ChatPresenter {
 
     @Override
     public void onForward() {
+        view.showToast("Moving Forward...");
         interactor.sendMessage("w");
     }
 
     @Override
     public void onBack() {
+        view.showToast("Moving Back...");
         interactor.sendMessage("s");
     }
 
     @Override
     public void onLeft() {
+        view.showToast("Moving Left...");
         interactor.sendMessage("a");
     }
 
     @Override
     public void onRight() {
+        view.showToast("Moving Right...");
         interactor.sendMessage("d");
     }
 
@@ -87,6 +91,12 @@ public class ChatPresenterImpl implements ChatPresenter {
     @Override
     public void onLevel6() {
         interactor.sendMessage("5");
+    }
+
+    @Override
+    public void onLevel(int level){
+        view.showToast("Start a new Level " + Integer.toString(level) + "!\nInitializing...");
+        interactor.sendMessage(Integer.toString(level));
     }
 
     private DeviceCallback communicationCallback = new DeviceCallback() {
